@@ -33,3 +33,7 @@ void UsersFile::writeAllUsersToFile(vector <User> &users){
     xml.OutOfElem();
     xml.Save( USERS_FILE_NAME.c_str() );
 }
+
+void UsersFile::appendUserToFile(User user){
+    ;
+}

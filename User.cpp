@@ -26,7 +26,7 @@ void User::setSurname(string newSurname){
 
 /****************************************/
 
-string User::getUserID(){
+int User::getUserID(){
     return userID;
 };
 
@@ -52,11 +52,11 @@ string User::serialize(){
     CMarkup xml;
     xml.AddElem( "user" );
     xml.IntoElem();
-    xml.AddElem( "userID", "1" );
-    xml.AddElem( "login", "Marcin" );
-    xml.AddElem( "password", "qwerty" );
-    xml.AddElem( "name", "Marcin" );
-    xml.AddElem( "surname", "Zapala" );
+    xml.AddElem( "userID", SupportiveMethods::convertIntToString(userID) );
+    xml.AddElem( "login", login );
+    xml.AddElem( "password", password );
+    xml.AddElem( "name", name );
+    xml.AddElem( "surname", surname );
     xml.OutOfElem();
 
     return xml.GetDoc();
@@ -69,9 +69,9 @@ void User::deserialize(string strSubDoc){
     xml.IntoElem();
 
     if ( xml.FindElem("userID" ) )
-        userID = xml.GetData();
+        userID = SupportiveMethods::convertStringToInt(xml.GetData());
     else
-        userID = "0";
+        userID = 0;
 
     if ( xml.FindElem("login") )
         login = xml.GetData();

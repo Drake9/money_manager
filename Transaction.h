@@ -56,3 +56,19 @@ public:
 
     Income &operator = (const Income &income2);
 };
+
+class Expense :public Transaction{
+
+    int expenseID;
+
+public:
+
+    int getExpenseID();
+    void setExpenseID(int newID);
+    void printExpense();
+
+    string serialize();
+    void deserialize(string strSubDoc);
+
+    Expense &operator = (const Expense &expense2);
+};

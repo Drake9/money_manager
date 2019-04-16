@@ -188,3 +188,26 @@ Income & Income::operator = (const Income &income2){
     this->item = income2.item;
     this->amount = income2.amount;
 }
+
+/**------------ EXPENSE --------------**/
+
+void Expense::setExpenseID(int newID){
+    expenseID = newID;
+}
+
+int Expense::getExpenseID(){
+    return expenseID;
+}
+
+void Expense::printExpense(){
+    cout << endl << "expenseID: " << expenseID << endl;
+    printTransaction();
+}
+
+Expense & Expense::operator = (const Expense &expense2){
+    this->expenseID = expense2.expenseID;
+    this->userID = expense2.userID;
+    this->date = expense2.date;
+    this->item = expense2.item;
+    this->amount = expense2.amount;
+}

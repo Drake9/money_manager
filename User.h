@@ -1,11 +1,12 @@
 #include <iostream>
 #include "Markup.h"
+#include "SupportiveMethods.h"
 
 using namespace std;
 
 class User{
 
-    string userID;
+    int userID;
     string login;
     string password;
     string name;
@@ -19,7 +20,7 @@ public:
     void setName(string newName);
     void setSurname(string newSurname);
 
-    string getUserID();
+    int getUserID();
     string getLogin();
     string getPassword();
     string getName();
