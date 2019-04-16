@@ -2,7 +2,7 @@
 
 using namespace std;
 
-vector <Income> TransactionsFile::loadIncomesFromFile(){
+vector <Income> TransactionsFile::loadIncomesFromFile(int loggedInUserID){
     Income income;
     vector <Income> incomes;
     CMarkup xml;
@@ -31,4 +31,8 @@ void TransactionsFile::writeAllIncomesToFile(vector <Income> &incomes){
 
     xml.OutOfElem();
     xml.Save( INCOMES_FILE_NAME.c_str() );
+}
+
+bool TransactionsFile::appendIncomeToFile(Income income){
+    ;
 }

@@ -1,54 +1,71 @@
 #include <iostream>
-#include "UsersFile.h"
-#include "TransactionsFile.h"
+#include <fstream>
+#include <windows.h>
+#include <vector>
+#include <algorithm>
+#include <sstream>
+#include "MoneyManager.h"
 
 using namespace std;
 
 int main(){
 
-    string customMoneyString = "";
+    MoneyManager moneyManager("users.xml", "incomes.xml", "expenses.xml");
 
-    /*
-        cout << "Podaj pierwsza kwote: ";
-        cin >> customMoneyString;
-        Money value1(customMoneyString);
+    char choice;
 
-        cout << "Podaj druga kwote: ";
-        cin >> customMoneyString;
-        Money value2(customMoneyString);
+    while (true)
+    {
+        if (!moneyManager.ifUserIsLoggedIn())
+        {
+            choice = moneyManager.chooseMainMenuOption();
 
-        if(value1 == value2)
-            cout << "Kwoty sa rowne." << endl;
+            switch (choice)
+            {
+            case '1':
+                moneyManager.logUserIn();
+                break;
+            case '2':
+                moneyManager.registerUser();
+                break;
+            case '0':
+                exit(0);
+                break;
+            default:
+                cout << endl << "Nie ma takiej opcji w menu." << endl << endl;
+                system("pause");
+                break;
+            }
+        }
         else
-            cout << "Nieprawda." << endl;
+        {
+            choice = moneyManager.chooseUserMenuOption();
 
-    /*
-
-    /*********************/
-
-    /*
-    vector<User> users;
-
-    UsersFile usersFile("users.xml");
-
-    users = usersFile.loadUsersFromFile();
-
-    for(vector <User>::iterator itr = users.begin(); itr != users.end(); itr++){
-        itr->view();
+            switch (choice)
+            {
+            case '1':
+                moneyManager.addIncome();
+                break;
+            case '2':
+                moneyManager.addExpense();
+                break;
+            case '3':
+                moneyManager.viewCurrentMonthBalance();
+                break;
+            case '4':
+                moneyManager.viewLastMonthBalance();
+                break;
+            case '5':
+                moneyManager.viewCustomBalance();
+                break;
+            case '7':
+                moneyManager.changeUserPassword();
+                break;
+            case '9':
+                moneyManager.logUserOut();
+                break;
+            }
+        }
     }
-    */
-
-    /*********************/
-
-    vector<Income> incomes;
-
-    TransactionsFile transactionsFile("incomes.xml");
-
-    incomes = transactionsFile.loadIncomesFromFile();
-
-    for(vector <Income>::iterator itr = incomes.begin(); itr != incomes.end(); itr++){
-        itr->printIncome();
-    }
-
     return 0;
 }
