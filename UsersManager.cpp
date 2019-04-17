@@ -17,7 +17,7 @@ void UsersManager::registerUser(){
     User user = inputNewUserData();
 
     users.push_back(user);
-    usersFile.appendUserToFile(user);
+    usersFile.writeAllUsersToFile(users);
 
     cout << endl << "Konto zostalo zalozone pomyslnie." << endl << endl;
     system("pause");
@@ -30,9 +30,9 @@ User UsersManager::inputNewUserData(){
     user.setUserID(getNewUserID());
 
     do{
-        cout <<  "Podaj swoj unikalny login: ";
+        cout <<  "Podaj login: ";
         login = SupportiveMethods::inputLine();
-    } while (ifLoginExists(login) == true);
+    } while(ifLoginExists(login) == true || login == "");
     user.setLogin(login);
 
     cout << "Podaj haslo: ";
@@ -58,9 +58,9 @@ int UsersManager::getNewUserID(){
 }
 
 bool UsersManager::ifLoginExists(string login){
-    for(int i; i<users.size(); i++){
-        if(users[i].getLogin() == login){
-            cout << endl << "Istnieje uzytkownik o takim loginie." << endl;
+    for (int i=0; i<users.size(); i++){
+        if (users[i].getLogin() == login){
+            cout << endl << "Istnieje uzytkownik o takim loginie." << endl << endl;
             return true;
         }
     }
@@ -68,12 +68,8 @@ bool UsersManager::ifLoginExists(string login){
 }
 
 void UsersManager::printAllUsers(){
-    for(int i=0; i<users.size(); i++){
-        cout << users[i].getUserID() << endl;
-        cout << users[i].getLogin() << endl;
-        cout << users[i].getPassword() << endl;
-        cout << users[i].getName() << endl;
-        cout << users[i].getSurname() << endl << endl;
+    for (int i=0; i<users.size(); i++){
+        users[i].print();
     }
 }
 
@@ -88,9 +84,9 @@ void UsersManager::logUserIn(){
     {
         if (itr -> getLogin() == login)
         {
-            for (int fails = 0; fails < 3; fails++)
+            for (int attempts = 3; attempts > 0; attempts--)
             {
-                cout << "Podaj haslo. Pozostalo prob: " << fails << ": ";
+                cout << "Podaj haslo. Pozostalo prob: " << attempts << ": ";
                 password = SupportiveMethods::inputLine();
 
                 if (itr -> getPassword() == password)

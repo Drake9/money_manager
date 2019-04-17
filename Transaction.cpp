@@ -50,6 +50,23 @@ void Transaction::setDate(string newDate){
     }
 }
 
+bool Transaction::setDateAndConfirm(string newDate){
+    bool success = false;
+
+    if(validateString(newDate)){
+        int year = SupportiveMethods::convertStringToInt(newDate.substr(0,4));
+        int month = SupportiveMethods::convertStringToInt(newDate.substr(5,2));
+        int day = SupportiveMethods::convertStringToInt(newDate.substr(8,2));
+
+        if(validateDate(year, month, day)){
+            date = 10000 * year + 100 * month + day;
+            success = true;
+        }
+    }
+
+    return success;
+}
+
 bool Transaction::validateString(string text){
     if(text.size() != 10)
         return false;
@@ -118,7 +135,7 @@ string Income::serialize(){
     xml.AddElem("incomeID", incomeID);
     xml.AddElem("userID", userID);
     xml.AddElem("date", getDateAsString());
-    xml.AddElem("item", "wynagrodzenie" );
+    xml.AddElem("item", item);
     xml.AddElem("amount", amount.getAmountAsString());
     xml.OutOfElem();
 

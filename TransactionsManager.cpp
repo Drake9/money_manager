@@ -42,26 +42,41 @@ void TransactionsManager::addNewExpense(){
 
 Income TransactionsManager::inputNewIncomeData(){
     Income income;
-    /*
-    adresat.ustawId(plikZAdresatami.pobierzIdOstatniegoAdresata()+1);
-    adresat.ustawIdUzytkownika(ID_ZALOGOWANEGO_UZYTKOWNIKA);
 
-    cout << "Podaj imie: ";
-    adresat.ustawImie(MetodyPomocnicze::wczytajLinie());
-    adresat.ustawImie(MetodyPomocnicze::zamienPierwszaLitereNaDuzaAPozostaleNaMale(adresat.pobierzImie()));
+    income.setIncomeID(transactionsFile.getLastIncomeID()+1);
+    income.setUserID(LOGGED_IN_USER_ID);
 
-    cout << "Podaj nazwisko: ";
-    adresat.ustawNazwisko(MetodyPomocnicze::wczytajLinie());
-    adresat.ustawNazwisko(MetodyPomocnicze::zamienPierwszaLitereNaDuzaAPozostaleNaMale(adresat.pobierzNazwisko()));
+    char choice = 'a';
 
-    cout << "Podaj numer telefonu: ";
-    adresat.ustawNumerTelefonu(MetodyPomocnicze::wczytajLinie());
+    do{
+        cout << "Wybierz 'T', aby dodac przychod z dzisiejsza data, lub 'N', aby wybrac inna date przychodu: ";
+        choice = SupportiveMethods::inputChar();
+    }while(choice != 't' && choice != 'T' && choice != 'N' && choice != 'n');
 
-    cout << "Podaj email: ";
-    adresat.ustawEmail(MetodyPomocnicze::wczytajLinie());
+    if(choice == 'T' || choice == 't'){
+        time_t currentTime;
+        struct tm * data;
+        char dateAsTable[11];
+        string dateAsString = "";
 
-    cout << "Podaj adres: ";
-    adresat.ustawAdres(MetodyPomocnicze::wczytajLinie());
-    */
+        time( & currentTime );
+        data = localtime( & currentTime );
+
+        strftime(dateAsTable, 11, "%Y-%m-%d", data);
+        dateAsString = SupportiveMethods::convertTableToString(dateAsTable, 10);
+        income.setDate(dateAsString);
+    }
+    else{
+        do{
+            cout << "Podaj date przychodu w formacie RRRR-MM-DD: ";
+        }while(!income.setDateAndConfirm(SupportiveMethods::inputLine()));
+    }
+
+    cout << "Podaj tytul przychodu: ";
+    income.setItem(SupportiveMethods::inputLine());
+
+    cout << "Podaj kwote przychodu: ";
+    income.setAmount(SupportiveMethods::inputLine());
+
     return income;
 }

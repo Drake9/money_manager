@@ -15,5 +15,4 @@ public:
     UsersFile(string usersFileName): USERS_FILE_NAME(usersFileName){};
     vector <User> loadUsersFromFile();
     void writeAllUsersToFile(vector <User> &users);
-    void appendUserToFile(User user);
 };
