@@ -28,5 +28,6 @@ public:
 
     string serialize();
     void deserialize(string strSubDoc);
-    void view();
+
+    void print();
 };

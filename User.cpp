@@ -3,6 +3,8 @@
 
 using namespace std;
 
+/** --------- SETTERS --------- **/
+
 void User::setUserID(int newID){
     if(newID >= 0)
         userID = newID;
@@ -24,7 +26,7 @@ void User::setSurname(string newSurname){
     surname = newSurname;
 };
 
-/****************************************/
+/** --------- GETTERS --------- **/
 
 int User::getUserID(){
     return userID;
@@ -46,7 +48,7 @@ string User::getSurname(){
     return surname;
 };
 
-/******************************************/
+/** --------- SERIALIZATION --------- **/
 
 string User::serialize(){
     CMarkup xml;
@@ -94,10 +96,12 @@ void User::deserialize(string strSubDoc){
         surname = "";
 }
 
-void User::view(){
-    cout << endl << "userID: " << userID << endl;
+/***********************************/
+
+void User::print (){
+    cout << "userID: " << userID << endl;
     cout << "login: " << login << endl;
     cout << "password: " << password << endl;
     cout << "name: " << name << endl;
-    cout << "surname: " << surname << endl;
+    cout << "surname: " << surname << endl << endl;
 }

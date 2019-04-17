@@ -34,6 +34,7 @@ public:
 
     void setUserID(int newID);
     void setDate(string newDate);
+    bool setDateAndConfirm(string newDate);
     void setItem(string newItem);
     void setAmount(string newAmount);
 
