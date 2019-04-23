@@ -110,3 +110,17 @@ string SupportiveMethods::convertTableToString(char *table, int tableSize){
     }
     return output;
 }
+
+string SupportiveMethods::getCurrentDate(){
+    time_t currentTime;
+    struct tm * data;
+    char dateAsTable[11];
+    string dateAsString = "";
+
+    time( & currentTime );
+    data = localtime( & currentTime );
+
+    strftime(dateAsTable, 11, "%Y-%m-%d", data);
+    dateAsString = SupportiveMethods::convertTableToString(dateAsTable, 10);
+    return dateAsString;
+}

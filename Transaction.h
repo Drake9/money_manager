@@ -24,6 +24,7 @@ protected:
     bool validateString(string text);
     bool validateDate(int year, int month, int day);
     int countDaysInMonth(int customYear, int customMonth);
+    int getMaximalDate();
 
 public:
 

@@ -60,7 +60,8 @@ bool Transaction::setDateAndConfirm(string newDate){
 
         if(validateDate(year, month, day)){
             date = 10000 * year + 100 * month + day;
-            success = true;
+            if(date <= getMaximalDate())
+                success = true;
         }
     }
 
@@ -118,6 +119,19 @@ int Transaction::countDaysInMonth(int year, int month){
     }
 }
 
+int Transaction::getMaximalDate(){
+    string currentDate = SupportiveMethods::getCurrentDate();
+
+    int year = SupportiveMethods::convertStringToInt(currentDate.substr(0,4));
+    int month = SupportiveMethods::convertStringToInt(currentDate.substr(5,2));
+
+    int day = countDaysInMonth(year, month);
+
+    date = 10000 * year + 100 * month + day;
+
+    return date;
+}
+
 void Transaction::setItem(string newItem){
     item = newItem;
 }
@@ -127,6 +141,36 @@ void Transaction::setAmount(string newAmount){
 }
 
 /**--------------------------------**/
+
+void Transaction::printTransaction(){
+    cout << "userID: " << userID << endl;
+    cout << "date: " << getDateAsString() << endl;
+    cout << "item: " << item << endl;
+    cout << "amount: " << amount.getAmountAsString() << endl;
+}
+
+/**------------ INCOME ----------------**/
+
+void Income::setIncomeID(int newID){
+    incomeID = newID;
+}
+
+int Income::getIncomeID(){
+    return incomeID;
+}
+
+void Income::printIncome(){
+    cout << endl << "incomeID: " << incomeID << endl;
+    printTransaction();
+}
+
+Income & Income::operator = (const Income &income2){
+    this->incomeID = income2.incomeID;
+    this->userID = income2.userID;
+    this->date = income2.date;
+    this->item = income2.item;
+    this->amount = income2.amount;
+}
 
 string Income::serialize(){
     CMarkup xml;
@@ -173,37 +217,6 @@ void Income::deserialize(string strSubDoc){
         amount.setAmount(xml.GetData());
     else
         amount.setAmount(0);
-
-}
-
-void Transaction::printTransaction(){
-    cout << "userID: " << userID << endl;
-    cout << "date: " << getDateAsString() << endl;
-    cout << "item: " << item << endl;
-    cout << "amount: " << amount.getAmountAsString() << endl;
-}
-
-/**------------ INCOME ----------------**/
-
-void Income::setIncomeID(int newID){
-    incomeID = newID;
-}
-
-int Income::getIncomeID(){
-    return incomeID;
-}
-
-void Income::printIncome(){
-    cout << endl << "incomeID: " << incomeID << endl;
-    printTransaction();
-}
-
-Income & Income::operator = (const Income &income2){
-    this->incomeID = income2.incomeID;
-    this->userID = income2.userID;
-    this->date = income2.date;
-    this->item = income2.item;
-    this->amount = income2.amount;
 }
 
 /**------------ EXPENSE --------------**/
@@ -227,4 +240,51 @@ Expense & Expense::operator = (const Expense &expense2){
     this->date = expense2.date;
     this->item = expense2.item;
     this->amount = expense2.amount;
+}
+
+string Expense::serialize(){
+    CMarkup xml;
+    xml.AddElem("expense");
+    xml.IntoElem();
+    xml.AddElem("expenseID", expenseID);
+    xml.AddElem("userID", userID);
+    xml.AddElem("date", getDateAsString());
+    xml.AddElem("item", item);
+    xml.AddElem("amount", amount.getAmountAsString());
+    xml.OutOfElem();
+
+    return xml.GetDoc();
+}
+
+void Expense::deserialize(string strSubDoc){
+
+    CMarkup xml( strSubDoc );
+
+    xml.FindElem(); // income
+    xml.IntoElem();
+
+    if ( xml.FindElem("expenseID" ) )
+        expenseID = SupportiveMethods::convertStringToInt(xml.GetData());
+    else
+        expenseID = 0;
+
+    if ( xml.FindElem("userID" ) )
+        userID = SupportiveMethods::convertStringToInt(xml.GetData());
+    else
+        userID = 0;
+
+    if ( xml.FindElem("date") )
+        setDate(xml.GetData());
+    else
+        setDate("2001-01-01");
+
+    if ( xml.FindElem("item") )
+        item = xml.GetData();
+    else
+        item = "";
+
+    if ( xml.FindElem("amount") )
+        amount.setAmount(xml.GetData());
+    else
+        amount.setAmount(0);
 }

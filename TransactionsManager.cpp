@@ -23,8 +23,6 @@ void TransactionsManager::addNewIncome(){
 }
 
 void TransactionsManager::addNewExpense(){
-    ;
-    /*
     Expense expense;
 
     system("cls");
@@ -37,7 +35,6 @@ void TransactionsManager::addNewExpense(){
     else
         cout << "NIE udalo sie dodac nowego wydatku do pliku." << endl;
     system("pause");
-    */
 }
 
 Income TransactionsManager::inputNewIncomeData(){
@@ -54,21 +51,11 @@ Income TransactionsManager::inputNewIncomeData(){
     }while(choice != 't' && choice != 'T' && choice != 'N' && choice != 'n');
 
     if(choice == 'T' || choice == 't'){
-        time_t currentTime;
-        struct tm * data;
-        char dateAsTable[11];
-        string dateAsString = "";
-
-        time( & currentTime );
-        data = localtime( & currentTime );
-
-        strftime(dateAsTable, 11, "%Y-%m-%d", data);
-        dateAsString = SupportiveMethods::convertTableToString(dateAsTable, 10);
-        income.setDate(dateAsString);
+        income.setDate(SupportiveMethods::getCurrentDate());
     }
     else{
         do{
-            cout << "Podaj date przychodu w formacie RRRR-MM-DD: ";
+            cout << "Podaj date przychodu w formacie RRRR-MM-DD - maksymalnie ostatni dzien biezacego miesiaca: ";
         }while(!income.setDateAndConfirm(SupportiveMethods::inputLine()));
     }
 
@@ -79,4 +66,39 @@ Income TransactionsManager::inputNewIncomeData(){
     income.setAmount(SupportiveMethods::inputLine());
 
     return income;
+}
+
+Expense TransactionsManager::inputNewExpenseData(){
+    Expense expense;
+
+    expense.setExpenseID(transactionsFile.getLastExpenseID()+1);
+    expense.setUserID(LOGGED_IN_USER_ID);
+
+    char choice = 'a';
+
+    do{
+        cout << "Wybierz 'T', aby dodac wydatek z dzisiejsza data, lub 'N', aby wybrac inna date wydatku: ";
+        choice = SupportiveMethods::inputChar();
+    }while(choice != 't' && choice != 'T' && choice != 'N' && choice != 'n');
+
+    if(choice == 'T' || choice == 't'){
+        expense.setDate(SupportiveMethods::getCurrentDate());
+    }
+    else{
+        do{
+            cout << "Podaj date wydatku w formacie RRRR-MM-DD - maksymalnie ostatni dzien biezacego miesiaca: ";
+        }while(!expense.setDateAndConfirm(SupportiveMethods::inputLine()));
+    }
+
+    cout << "Podaj tytul wydatku: ";
+    expense.setItem(SupportiveMethods::inputLine());
+
+    cout << "Podaj kwote wydatku: ";
+    expense.setAmount(SupportiveMethods::inputLine());
+
+    return expense;
+}
+
+void TransactionsManager::viewCurrentMonthBalance(){
+    ;
 }
