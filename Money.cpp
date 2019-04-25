@@ -19,7 +19,7 @@ Money::Money(string text){
 /**----- GETTERS & SETTERS ------**/
 
 void Money::setAmount(int amount){
-    this->amount = amount * 100;
+    this->amount = amount;
 }
 
 void Money::setAmount(string text){
@@ -70,6 +70,10 @@ bool Money::validateString(string text){
         return true;
 }
 
+int Money::getAmount(){
+    return amount;
+}
+
 string Money::getAmountAsString(){
     int majors = amount / 100;
     int minors = amount % 100;
@@ -107,22 +111,26 @@ void Money::deserialize(string strSubDoc){
 /**------------ OPERATORS ------------**/
 
 Money operator + (const Money &money1, const Money &money2){
-    Money result(money1.amount + money2.amount);
+    Money result;
+    result.setAmount(money1.amount + money2.amount);
     return result;
 }
 
 Money operator - (const Money &money1, const Money &money2){
-    Money result(money1.amount - money2.amount);
+    Money result;
+    result.setAmount(money1.amount - money2.amount);
     return result;
 }
 
 Money operator * (const Money &money, const int &number){
-    Money result(money.amount * number);
+    Money result;
+    result.setAmount(money.amount * number);
     return result;
 }
 
 Money operator * (const int &number, const Money &money){
-    Money result(money.amount * number);
+    Money result;
+    result.setAmount(money.amount * number);
     return result;
 }
 
@@ -132,7 +140,8 @@ int operator / (const Money &money1, const Money &money2){
 }
 
 Money operator / (const Money &money, const int &number){
-    Money result(money.amount / number);
+    Money result;
+    result.setAmount(money.amount / number);
     return result;
 }
 
@@ -142,4 +151,8 @@ bool operator == (const Money &money1, const Money &money2){
 
 Money & Money::operator = (const Money &money2){
     this->amount = money2.amount;
+}
+
+Money & Money::operator += (const Money &money2){
+    this->amount += money2.amount;
 }

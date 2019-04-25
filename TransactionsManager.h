@@ -15,6 +15,7 @@ class TransactionsManager{
     Income inputNewIncomeData();
     Expense inputNewExpenseData();
     void viewTransactionData(Transaction transaction);
+    void viewBalance(int periodStart, int periodEnd);
 
 public:
 
@@ -22,6 +23,7 @@ public:
         : transactionsFile(incomesFileName, expensesFileName), LOGGED_IN_USER_ID(loggedInUserID)
     {
         incomes = transactionsFile.loadIncomesFromFile(LOGGED_IN_USER_ID);
+        expenses = transactionsFile.loadExpensesFromFile(LOGGED_IN_USER_ID);
     };
 
     void addNewIncome();

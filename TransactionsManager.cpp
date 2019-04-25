@@ -100,5 +100,62 @@ Expense TransactionsManager::inputNewExpenseData(){
 }
 
 void TransactionsManager::viewCurrentMonthBalance(){
-    ;
+    string currentDate = SupportiveMethods::getCurrentDate();
+
+    int year = SupportiveMethods::convertStringToInt(currentDate.substr(0,4));
+    int month = SupportiveMethods::convertStringToInt(currentDate.substr(5,2));
+
+    int periodStart = 10000 * year + 100 * month + 1;
+    int periodEnd = 10000 * year + 100 * month + SupportiveMethods::countDaysInMonth(year, month);
+
+    viewBalance(periodStart, periodEnd);
+}
+
+void TransactionsManager::viewBalance(int periodStart, int periodEnd){
+    vector <Income> currentIncomes;
+    vector <Expense> currentExpenses;
+    Money incomeSum, expenseSum;
+
+    system("cls");
+
+    for (int i=0; i<incomes.size(); i++){
+        if(incomes[i].getDate() >= periodStart && incomes[i].getDate() <= periodEnd){
+            currentIncomes.push_back(incomes[i]);
+            incomeSum += incomes[i].getAmount();
+        }
+    }
+    sort(currentIncomes.begin(), currentIncomes.end());
+
+    for (int i=0; i<expenses.size(); i++){
+        if(expenses[i].getDate() >= periodStart && expenses[i].getDate() <= periodEnd){
+            currentExpenses.push_back(expenses[i]);
+            expenseSum += expenses[i].getAmount();
+        }
+    }
+    sort(currentExpenses.begin(), currentExpenses.end());
+
+    cout << "BILANS ZA OKRES " << periodStart << " - " << periodEnd << endl << endl;
+
+    cout << "PRZYCHODY: " << endl;
+
+    for(int i=0; i<currentIncomes.size(); i++)
+        currentIncomes[i].printIncome();
+
+    cout << endl << "WYDATKI: " << endl;
+
+    for(int i=0; i<currentExpenses.size(); i++)
+        currentExpenses[i].printExpense();
+
+    cout << endl << "SUMA PRZYCHODOW: " << incomeSum.getAmountAsString();
+    cout << endl << "SUMA WYDATKOW: " << expenseSum.getAmountAsString();
+
+    if(incomeSum.getAmount() >= expenseSum.getAmount())
+        cout << endl << endl << "OSZCZEDNOSCI: ";
+    else
+        cout << endl << endl << "DLUG: ";
+
+    Money difference = incomeSum - expenseSum;
+    cout << difference.getAmountAsString() << endl;
+
+    system("pause");
 }

@@ -97,6 +97,7 @@ bool TransactionsFile::appendIncomeToFile(Income newIncome){
 
     xml.OutOfElem();
     xml.Save( INCOMES_FILE_NAME.c_str() );
+    lastIncomeID++;
 
     return true;
 }
@@ -124,6 +125,7 @@ bool TransactionsFile::appendExpenseToFile(Expense newExpense){
 
     xml.OutOfElem();
     xml.Save( EXPENSES_FILE_NAME.c_str() );
+    lastExpenseID++;
 
     return true;
 }

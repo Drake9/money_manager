@@ -8,6 +8,10 @@ int Transaction::getUserID(){
     return userID;
 }
 
+int Transaction::getDate(){
+    return date;
+}
+
 string Transaction::getDateAsString(){
     string output = SupportiveMethods::convertIntToString(date);
 
@@ -96,27 +100,10 @@ bool Transaction::validateDate(int customYear, int customMonth, int customDay){
         return false;
     if(customDay < MINIMAL_DAY)
         return false;
-    if(customDay > countDaysInMonth(customYear, customMonth))
+    if(customDay > SupportiveMethods::countDaysInMonth(customYear, customMonth))
         return false;
 
     return true;
-}
-
-int Transaction::countDaysInMonth(int year, int month){
-    int table[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-
-    if(year%4 != 0)
-        return table[month-1];
-    else{
-        if(year%100 != 0)
-            return 29;
-        else{
-            if(year%400 != 0)
-                return 28;
-            else
-                return 29;
-        }
-    }
 }
 
 int Transaction::getMaximalDate(){
@@ -125,7 +112,7 @@ int Transaction::getMaximalDate(){
     int year = SupportiveMethods::convertStringToInt(currentDate.substr(0,4));
     int month = SupportiveMethods::convertStringToInt(currentDate.substr(5,2));
 
-    int day = countDaysInMonth(year, month);
+    int day = SupportiveMethods::countDaysInMonth(year, month);
 
     date = 10000 * year + 100 * month + day;
 
@@ -143,10 +130,9 @@ void Transaction::setAmount(string newAmount){
 /**--------------------------------**/
 
 void Transaction::printTransaction(){
-    cout << "userID: " << userID << endl;
-    cout << "date: " << getDateAsString() << endl;
-    cout << "item: " << item << endl;
+    cout << "date: " << getDateAsString() << "    ";
     cout << "amount: " << amount.getAmountAsString() << endl;
+    cout << "item: " << item << endl;
 }
 
 /**------------ INCOME ----------------**/
@@ -160,7 +146,7 @@ int Income::getIncomeID(){
 }
 
 void Income::printIncome(){
-    cout << endl << "incomeID: " << incomeID << endl;
+    cout << endl << "incomeID: " << incomeID << "    ";
     printTransaction();
 }
 
@@ -230,7 +216,7 @@ int Expense::getExpenseID(){
 }
 
 void Expense::printExpense(){
-    cout << endl << "expenseID: " << expenseID << endl;
+    cout << endl << "expenseID: " << expenseID << "    ";
     printTransaction();
 }
 
@@ -287,4 +273,10 @@ void Expense::deserialize(string strSubDoc){
         amount.setAmount(xml.GetData());
     else
         amount.setAmount(0);
+}
+
+/***************************************/
+
+bool operator < (const Transaction &deal1, const Transaction &deal2){
+    return (deal1.date < deal2.date);
 }
