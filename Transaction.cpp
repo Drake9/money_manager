@@ -137,6 +137,14 @@ void Transaction::printTransaction(){
 
 /**------------ INCOME ----------------**/
 
+Income::Income(){
+    incomeID = 0;
+    userID = 0;
+    date = 20010101;
+    amount.setAmount(0);
+    item = "";
+}
+
 void Income::setIncomeID(int newID){
     incomeID = newID;
 }
@@ -206,6 +214,14 @@ void Income::deserialize(string strSubDoc){
 }
 
 /**------------ EXPENSE --------------**/
+
+Expense::Expense(){
+    expenseID = 0;
+    userID = 0;
+    date = 20010101;
+    amount.setAmount(0);
+    item = "";
+}
 
 void Expense::setExpenseID(int newID){
     expenseID = newID;

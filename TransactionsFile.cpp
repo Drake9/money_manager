@@ -10,7 +10,7 @@ int TransactionsFile::getLastExpenseID(){
     return lastExpenseID;
 }
 
-vector <Income> TransactionsFile::loadIncomesFromFile(int loggedInUserID){
+vector <Income> TransactionsFile::loadUserIncomesFromFile(int loggedInUserID){
     Income income;
     vector <Income> incomes;
     CMarkup xml;
@@ -29,7 +29,7 @@ vector <Income> TransactionsFile::loadIncomesFromFile(int loggedInUserID){
     return incomes;
 }
 
-vector <Expense> TransactionsFile::loadExpensesFromFile(int loggedInUserID){
+vector <Expense> TransactionsFile::loadUserExpensesFromFile(int loggedInUserID){
     Expense expense;
     vector <Expense> expenses;
     CMarkup xml;
@@ -81,18 +81,17 @@ bool TransactionsFile::appendIncomeToFile(Income newIncome){
 
     xml.Load( INCOMES_FILE_NAME.c_str() );
 
-    xml.FindElem();
-    xml.IntoElem();
-    while ( xml.FindElem() ){
-        income.deserialize(xml.GetSubDoc());
-        incomes.push_back(income);
-    }
-
-    if(xml.GetTagName() != "incomes"){
+    if(!xml.FindElem("incomes")){
         xml.AddElem("incomes");
         xml.IntoElem();
     }
-
+    else{
+        xml.IntoElem();
+        while ( xml.FindElem() ){
+            income.deserialize(xml.GetSubDoc());
+            incomes.push_back(income);
+        }
+    }
     xml.AddSubDoc(newIncome.serialize());
 
     xml.OutOfElem();
@@ -109,16 +108,16 @@ bool TransactionsFile::appendExpenseToFile(Expense newExpense){
 
     xml.Load( EXPENSES_FILE_NAME.c_str() );
 
-    xml.FindElem();
-    xml.IntoElem();
-    while ( xml.FindElem() ){
-        expense.deserialize(xml.GetSubDoc());
-        expenses.push_back(expense);
-    }
-
-    if(xml.GetTagName() != "expenses"){
+    if(!xml.FindElem("expenses")){
         xml.AddElem("expenses");
         xml.IntoElem();
+    }
+    else{
+        xml.IntoElem();
+        while ( xml.FindElem() ){
+            expense.deserialize(xml.GetSubDoc());
+            expenses.push_back(expense);
+        }
     }
 
     xml.AddSubDoc(newExpense.serialize());

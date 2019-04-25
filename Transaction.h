@@ -50,6 +50,7 @@ class Income :public Transaction{
 
 public:
 
+    Income();
     int getIncomeID();
     void setIncomeID(int newID);
     void printIncome();
@@ -66,6 +67,7 @@ class Expense :public Transaction{
 
 public:
 
+    Expense();
     int getExpenseID();
     void setExpenseID(int newID);
     void printExpense();
