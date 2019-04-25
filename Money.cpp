@@ -9,7 +9,7 @@ Money::Money(){
 }
 
 Money::Money(int amount){
-    this->amount = amount * 100;
+    this->amount = amount;
 }
 
 Money::Money(string text){
@@ -111,26 +111,22 @@ void Money::deserialize(string strSubDoc){
 /**------------ OPERATORS ------------**/
 
 Money operator + (const Money &money1, const Money &money2){
-    Money result;
-    result.setAmount(money1.amount + money2.amount);
+    Money result(money1.amount + money2.amount);
     return result;
 }
 
 Money operator - (const Money &money1, const Money &money2){
-    Money result;
-    result.setAmount(money1.amount - money2.amount);
+    Money result(money1.amount - money2.amount);
     return result;
 }
 
 Money operator * (const Money &money, const int &number){
-    Money result;
-    result.setAmount(money.amount * number);
+    Money result(money.amount * number);
     return result;
 }
 
 Money operator * (const int &number, const Money &money){
-    Money result;
-    result.setAmount(money.amount * number);
+    Money result(money.amount * number);
     return result;
 }
 
@@ -140,8 +136,7 @@ int operator / (const Money &money1, const Money &money2){
 }
 
 Money operator / (const Money &money, const int &number){
-    Money result;
-    result.setAmount(money.amount / number);
+    Money result(money.amount / number);
     return result;
 }
 

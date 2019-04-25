@@ -149,9 +149,8 @@ void TransactionsManager::viewBalance(int periodStart, int periodEnd){
     cout << endl << "SUMA PRZYCHODOW: " << incomeSum.getAmountAsString();
     cout << endl << "SUMA WYDATKOW: " << expenseSum.getAmountAsString();
 
-    Money difference;
-    if(incomeSum.getAmount() >= expenseSum.getAmount()){
-        difference = incomeSum - expenseSum;
+    Money difference = incomeSum - expenseSum;
+    if(difference.getAmount() >= 0){
         cout << endl << endl << "OSZCZEDNOSCI: " << difference.getAmountAsString() << endl;
     }
     else{
