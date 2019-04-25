@@ -134,7 +134,7 @@ void TransactionsManager::viewBalance(int periodStart, int periodEnd){
     }
     sort(currentExpenses.begin(), currentExpenses.end());
 
-    cout << "BILANS ZA OKRES " << periodStart << " - " << periodEnd << endl << endl;
+    cout << "BILANS ZA OKRES " << convertIntToDate(periodStart) << " - " << convertIntToDate(periodEnd) << endl << endl;
 
     cout << "PRZYCHODY: " << endl;
 
@@ -159,4 +159,13 @@ void TransactionsManager::viewBalance(int periodStart, int periodEnd){
     }
 
     system("pause");
+}
+
+string TransactionsManager::convertIntToDate(int date){
+    string output = SupportiveMethods::convertIntToString(date);
+
+    output.insert(6, "-");
+    output.insert(4, "-");
+
+    return output;
 }

@@ -16,6 +16,7 @@ class TransactionsManager{
     Expense inputNewExpenseData();
     void viewTransactionData(Transaction transaction);
     void viewBalance(int periodStart, int periodEnd);
+    string convertIntToDate(int date);
 
 public:
 
