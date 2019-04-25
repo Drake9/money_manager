@@ -2,6 +2,7 @@
 #include <sstream>
 #include <fstream>
 #include <algorithm>
+#include <time.h>
 
 using namespace std;
 
@@ -22,6 +23,8 @@ public:
     static bool deleteFile(string fileName);
     static bool changeFileName(string fileName, string wantedFileName);
     static string convertTableToString(char *table, int tableSize);
+    static string getCurrentDate();
+    static int countDaysInMonth(int customYear, int customMonth);
 };
 
 #endif

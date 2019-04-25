@@ -8,6 +8,10 @@ int Transaction::getUserID(){
     return userID;
 }
 
+int Transaction::getDate(){
+    return date;
+}
+
 string Transaction::getDateAsString(){
     string output = SupportiveMethods::convertIntToString(date);
 
@@ -60,7 +64,8 @@ bool Transaction::setDateAndConfirm(string newDate){
 
         if(validateDate(year, month, day)){
             date = 10000 * year + 100 * month + day;
-            success = true;
+            if(date <= getMaximalDate())
+                success = true;
         }
     }
 
@@ -95,27 +100,23 @@ bool Transaction::validateDate(int customYear, int customMonth, int customDay){
         return false;
     if(customDay < MINIMAL_DAY)
         return false;
-    if(customDay > countDaysInMonth(customYear, customMonth))
+    if(customDay > SupportiveMethods::countDaysInMonth(customYear, customMonth))
         return false;
 
     return true;
 }
 
-int Transaction::countDaysInMonth(int year, int month){
-    int table[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+int Transaction::getMaximalDate(){
+    string currentDate = SupportiveMethods::getCurrentDate();
 
-    if(year%4 != 0)
-        return table[month-1];
-    else{
-        if(year%100 != 0)
-            return 29;
-        else{
-            if(year%400 != 0)
-                return 28;
-            else
-                return 29;
-        }
-    }
+    int year = SupportiveMethods::convertStringToInt(currentDate.substr(0,4));
+    int month = SupportiveMethods::convertStringToInt(currentDate.substr(5,2));
+
+    int day = SupportiveMethods::countDaysInMonth(year, month);
+
+    date = 10000 * year + 100 * month + day;
+
+    return date;
 }
 
 void Transaction::setItem(string newItem){
@@ -127,6 +128,43 @@ void Transaction::setAmount(string newAmount){
 }
 
 /**--------------------------------**/
+
+void Transaction::printTransaction(){
+    cout << "date: " << getDateAsString() << "    ";
+    cout << "amount: " << amount.getAmountAsString() << endl;
+    cout << "item: " << item << endl;
+}
+
+/**------------ INCOME ----------------**/
+
+Income::Income(){
+    incomeID = 0;
+    userID = 0;
+    date = 20010101;
+    amount.setAmount(0);
+    item = "";
+}
+
+void Income::setIncomeID(int newID){
+    incomeID = newID;
+}
+
+int Income::getIncomeID(){
+    return incomeID;
+}
+
+void Income::printIncome(){
+    cout << endl << "incomeID: " << incomeID << "    ";
+    printTransaction();
+}
+
+Income & Income::operator = (const Income &income2){
+    this->incomeID = income2.incomeID;
+    this->userID = income2.userID;
+    this->date = income2.date;
+    this->item = income2.item;
+    this->amount = income2.amount;
+}
 
 string Income::serialize(){
     CMarkup xml;
@@ -173,40 +211,17 @@ void Income::deserialize(string strSubDoc){
         amount.setAmount(xml.GetData());
     else
         amount.setAmount(0);
-
-}
-
-void Transaction::printTransaction(){
-    cout << "userID: " << userID << endl;
-    cout << "date: " << getDateAsString() << endl;
-    cout << "item: " << item << endl;
-    cout << "amount: " << amount.getAmountAsString() << endl;
-}
-
-/**------------ INCOME ----------------**/
-
-void Income::setIncomeID(int newID){
-    incomeID = newID;
-}
-
-int Income::getIncomeID(){
-    return incomeID;
-}
-
-void Income::printIncome(){
-    cout << endl << "incomeID: " << incomeID << endl;
-    printTransaction();
-}
-
-Income & Income::operator = (const Income &income2){
-    this->incomeID = income2.incomeID;
-    this->userID = income2.userID;
-    this->date = income2.date;
-    this->item = income2.item;
-    this->amount = income2.amount;
 }
 
 /**------------ EXPENSE --------------**/
+
+Expense::Expense(){
+    expenseID = 0;
+    userID = 0;
+    date = 20010101;
+    amount.setAmount(0);
+    item = "";
+}
 
 void Expense::setExpenseID(int newID){
     expenseID = newID;
@@ -217,7 +232,7 @@ int Expense::getExpenseID(){
 }
 
 void Expense::printExpense(){
-    cout << endl << "expenseID: " << expenseID << endl;
+    cout << endl << "expenseID: " << expenseID << "    ";
     printTransaction();
 }
 
@@ -227,4 +242,57 @@ Expense & Expense::operator = (const Expense &expense2){
     this->date = expense2.date;
     this->item = expense2.item;
     this->amount = expense2.amount;
+}
+
+string Expense::serialize(){
+    CMarkup xml;
+    xml.AddElem("expense");
+    xml.IntoElem();
+    xml.AddElem("expenseID", expenseID);
+    xml.AddElem("userID", userID);
+    xml.AddElem("date", getDateAsString());
+    xml.AddElem("item", item);
+    xml.AddElem("amount", amount.getAmountAsString());
+    xml.OutOfElem();
+
+    return xml.GetDoc();
+}
+
+void Expense::deserialize(string strSubDoc){
+
+    CMarkup xml( strSubDoc );
+
+    xml.FindElem(); // income
+    xml.IntoElem();
+
+    if ( xml.FindElem("expenseID" ) )
+        expenseID = SupportiveMethods::convertStringToInt(xml.GetData());
+    else
+        expenseID = 0;
+
+    if ( xml.FindElem("userID" ) )
+        userID = SupportiveMethods::convertStringToInt(xml.GetData());
+    else
+        userID = 0;
+
+    if ( xml.FindElem("date") )
+        setDate(xml.GetData());
+    else
+        setDate("2001-01-01");
+
+    if ( xml.FindElem("item") )
+        item = xml.GetData();
+    else
+        item = "";
+
+    if ( xml.FindElem("amount") )
+        amount.setAmount(xml.GetData());
+    else
+        amount.setAmount(0);
+}
+
+/***************************************/
+
+bool operator < (const Transaction &deal1, const Transaction &deal2){
+    return (deal1.date < deal2.date);
 }

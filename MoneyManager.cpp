@@ -84,8 +84,7 @@ void MoneyManager::addExpense(){
 }
 
 void MoneyManager::viewCurrentMonthBalance(){
-    ;
-    //transactionsManager->viewCurrentMonthBalance();
+    transactionsManager->viewCurrentMonthBalance();
 }
 
 void MoneyManager::viewLastMonthBalance(){

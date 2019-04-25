@@ -21,6 +21,7 @@ public:
     void setAmount(int amount);
     void setAmount(string amount);
 
+    int getAmount();
     string getAmountAsString();
 
     string serialize();
@@ -34,4 +35,5 @@ public:
     friend Money operator / (const Money &money, const int &number);
     friend bool operator == (const Money &money1, const Money &money2);
     Money &operator = (const Money &money2);
+    Money &operator += (const Money &money2);
 };

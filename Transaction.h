@@ -23,11 +23,12 @@ protected:
 
     bool validateString(string text);
     bool validateDate(int year, int month, int day);
-    int countDaysInMonth(int customYear, int customMonth);
+    int getMaximalDate();
 
 public:
 
     int getUserID();
+    int getDate();
     string getDateAsString();
     string getItem();
     Money getAmount();
@@ -40,6 +41,7 @@ public:
 
     void printTransaction();
 
+    friend bool operator < (const Transaction &deal1, const Transaction &deal2);
 };
 
 class Income :public Transaction{
@@ -48,6 +50,7 @@ class Income :public Transaction{
 
 public:
 
+    Income();
     int getIncomeID();
     void setIncomeID(int newID);
     void printIncome();
@@ -64,6 +67,7 @@ class Expense :public Transaction{
 
 public:
 
+    Expense();
     int getExpenseID();
     void setExpenseID(int newID);
     void printExpense();

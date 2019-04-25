@@ -9,7 +9,7 @@ Money::Money(){
 }
 
 Money::Money(int amount){
-    this->amount = amount * 100;
+    this->amount = amount;
 }
 
 Money::Money(string text){
@@ -19,7 +19,7 @@ Money::Money(string text){
 /**----- GETTERS & SETTERS ------**/
 
 void Money::setAmount(int amount){
-    this->amount = amount * 100;
+    this->amount = amount;
 }
 
 void Money::setAmount(string text){
@@ -68,6 +68,10 @@ bool Money::validateString(string text){
         return false;
     else
         return true;
+}
+
+int Money::getAmount(){
+    return amount;
 }
 
 string Money::getAmountAsString(){
@@ -142,4 +146,8 @@ bool operator == (const Money &money1, const Money &money2){
 
 Money & Money::operator = (const Money &money2){
     this->amount = money2.amount;
+}
+
+Money & Money::operator += (const Money &money2){
+    this->amount += money2.amount;
 }

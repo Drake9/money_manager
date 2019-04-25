@@ -17,10 +17,16 @@ public:
 
     TransactionsFile(string incomesFileName, string expensesFileName)
         : INCOMES_FILE_NAME(incomesFileName), EXPENSES_FILE_NAME(expensesFileName)
-    {};
+    {
+        lastIncomeID = 0;
+        lastExpenseID = 0;
+    };
     int getLastIncomeID();
     int getLastExpenseID();
-    vector <Income> loadIncomesFromFile(int loggedInUserID);
+    vector <Income> loadUserIncomesFromFile(int loggedInUserID);
+    vector <Expense> loadUserExpensesFromFile(int loggedInUserID);
     void writeAllIncomesToFile(vector <Income> &incomes);
+    void writeAllExpensesToFile(vector <Expense> &expenses);
     bool appendIncomeToFile(Income newIncome);
+    bool appendExpenseToFile(Expense newExpense);
 };

@@ -10,7 +10,7 @@ int TransactionsFile::getLastExpenseID(){
     return lastExpenseID;
 }
 
-vector <Income> TransactionsFile::loadIncomesFromFile(int loggedInUserID){
+vector <Income> TransactionsFile::loadUserIncomesFromFile(int loggedInUserID){
     Income income;
     vector <Income> incomes;
     CMarkup xml;
@@ -21,15 +21,34 @@ vector <Income> TransactionsFile::loadIncomesFromFile(int loggedInUserID){
     xml.IntoElem();
     while ( xml.FindElem() ){
         income.deserialize(xml.GetSubDoc());
-        incomes.push_back(income);
+        if(income.getUserID() == loggedInUserID)
+            incomes.push_back(income);
     }
     lastIncomeID = income.getIncomeID();
 
     return incomes;
 }
 
-void TransactionsFile::writeAllIncomesToFile(vector <Income> &incomes){
+vector <Expense> TransactionsFile::loadUserExpensesFromFile(int loggedInUserID){
+    Expense expense;
+    vector <Expense> expenses;
+    CMarkup xml;
 
+    xml.Load( EXPENSES_FILE_NAME.c_str() );
+
+    xml.FindElem();
+    xml.IntoElem();
+    while ( xml.FindElem() ){
+        expense.deserialize(xml.GetSubDoc());
+        if(expense.getUserID() == loggedInUserID)
+            expenses.push_back(expense);
+    }
+    lastExpenseID = expense.getExpenseID();
+
+    return expenses;
+}
+
+void TransactionsFile::writeAllIncomesToFile(vector <Income> &incomes){
     CMarkup xml;
     xml.AddElem("incomes");
     xml.IntoElem();
@@ -42,6 +61,19 @@ void TransactionsFile::writeAllIncomesToFile(vector <Income> &incomes){
     xml.Save( INCOMES_FILE_NAME.c_str() );
 }
 
+void TransactionsFile::writeAllExpensesToFile(vector <Expense> &expenses){
+    CMarkup xml;
+    xml.AddElem("expenses");
+    xml.IntoElem();
+
+    for (vector <Expense>::iterator itr = expenses.begin(); itr != expenses.end(); itr++){
+        xml.AddSubDoc(itr->serialize());
+    }
+
+    xml.OutOfElem();
+    xml.Save( EXPENSES_FILE_NAME.c_str() );
+}
+
 bool TransactionsFile::appendIncomeToFile(Income newIncome){
     vector <Income> incomes;
     Income income;
@@ -49,17 +81,50 @@ bool TransactionsFile::appendIncomeToFile(Income newIncome){
 
     xml.Load( INCOMES_FILE_NAME.c_str() );
 
-    xml.FindElem();
-    xml.IntoElem();
-    while ( xml.FindElem() ){
-        income.deserialize(xml.GetSubDoc());
-        incomes.push_back(income);
+    if(!xml.FindElem("incomes")){
+        xml.AddElem("incomes");
+        xml.IntoElem();
     }
-
+    else{
+        xml.IntoElem();
+        while ( xml.FindElem() ){
+            income.deserialize(xml.GetSubDoc());
+            incomes.push_back(income);
+        }
+    }
     xml.AddSubDoc(newIncome.serialize());
 
     xml.OutOfElem();
     xml.Save( INCOMES_FILE_NAME.c_str() );
+    lastIncomeID++;
+
+    return true;
+}
+
+bool TransactionsFile::appendExpenseToFile(Expense newExpense){
+    vector <Expense> expenses;
+    Expense expense;
+    CMarkup xml;
+
+    xml.Load( EXPENSES_FILE_NAME.c_str() );
+
+    if(!xml.FindElem("expenses")){
+        xml.AddElem("expenses");
+        xml.IntoElem();
+    }
+    else{
+        xml.IntoElem();
+        while ( xml.FindElem() ){
+            expense.deserialize(xml.GetSubDoc());
+            expenses.push_back(expense);
+        }
+    }
+
+    xml.AddSubDoc(newExpense.serialize());
+
+    xml.OutOfElem();
+    xml.Save( EXPENSES_FILE_NAME.c_str() );
+    lastExpenseID++;
 
     return true;
 }
