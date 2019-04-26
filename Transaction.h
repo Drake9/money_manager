@@ -4,6 +4,7 @@
 #include "Markup.h"
 #include "SupportiveMethods.h"
 #include "Money.h"
+#include "Date.h"
 
 using namespace std;
 
@@ -11,19 +12,10 @@ class Transaction{
 
 protected:
 
-    const int MINIMAL_YEAR = 2000;
-    const int MINIMAL_MONTH = 1;
-    const int MAXIMAL_MONTH = 12;
-    const int MINIMAL_DAY = 1;
-
     int userID;
-    int date;
+    Date date;
     string item;
     Money amount;
-
-    bool validateString(string text);
-    bool validateDate(int year, int month, int day);
-    int getMaximalDate();
 
 public:
 

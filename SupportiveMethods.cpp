@@ -110,34 +110,3 @@ string SupportiveMethods::convertTableToString(char *table, int tableSize){
     }
     return output;
 }
-
-string SupportiveMethods::getCurrentDate(){
-    time_t currentTime;
-    struct tm * data;
-    char dateAsTable[11];
-    string dateAsString = "";
-
-    time( & currentTime );
-    data = localtime( & currentTime );
-
-    strftime(dateAsTable, 11, "%Y-%m-%d", data);
-    dateAsString = SupportiveMethods::convertTableToString(dateAsTable, 10);
-    return dateAsString;
-}
-
-int SupportiveMethods::countDaysInMonth(int year, int month){
-    int table[12] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-
-    if(year%4 != 0)
-        return table[month-1];
-    else{
-        if(year%100 != 0)
-            return 29;
-        else{
-            if(year%400 != 0)
-                return 28;
-            else
-                return 29;
-        }
-    }
-}

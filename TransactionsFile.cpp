@@ -47,7 +47,7 @@ vector <Expense> TransactionsFile::loadUserExpensesFromFile(int loggedInUserID){
 
     return expenses;
 }
-
+/*
 void TransactionsFile::writeAllIncomesToFile(vector <Income> &incomes){
     CMarkup xml;
     xml.AddElem("incomes");
@@ -73,7 +73,7 @@ void TransactionsFile::writeAllExpensesToFile(vector <Expense> &expenses){
     xml.OutOfElem();
     xml.Save( EXPENSES_FILE_NAME.c_str() );
 }
-
+*/
 bool TransactionsFile::appendIncomeToFile(Income newIncome){
     vector <Income> incomes;
     Income income;

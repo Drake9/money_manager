@@ -15,8 +15,7 @@ class TransactionsManager{
     Income inputNewIncomeData();
     Expense inputNewExpenseData();
     void viewTransactionData(Transaction transaction);
-    void viewBalance(int periodStart, int periodEnd);
-    string convertIntToDate(int date);
+    void viewBalance(Date periodStart, Date periodEnd);
 
 public:
 
