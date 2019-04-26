@@ -64,7 +64,7 @@ bool Transaction::setDateAndConfirm(string newDate){
 
         if(validateDate(year, month, day)){
             date = 10000 * year + 100 * month + day;
-            if(date <= getMaximalDate())
+            if(getMaximalDate() >= date)
                 success = true;
         }
     }
@@ -114,9 +114,9 @@ int Transaction::getMaximalDate(){
 
     int day = SupportiveMethods::countDaysInMonth(year, month);
 
-    date = 10000 * year + 100 * month + day;
+    int maxDate = 10000 * year + 100 * month + day;
 
-    return date;
+    return maxDate;
 }
 
 void Transaction::setItem(string newItem){
