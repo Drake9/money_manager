@@ -88,11 +88,9 @@ void MoneyManager::viewCurrentMonthBalance(){
 }
 
 void MoneyManager::viewLastMonthBalance(){
-    ;
-    //transactionsManager->viewLastMonthBalance();
+    transactionsManager->viewLastMonthBalance();
 }
 
 void MoneyManager::viewCustomBalance(){
-    ;
-    //transactionsManager->viewCustomBalance();
+    transactionsManager->viewCustomBalance();
 }

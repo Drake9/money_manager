@@ -111,6 +111,39 @@ void TransactionsManager::viewCurrentMonthBalance(){
     viewBalance(periodStart, periodEnd);
 }
 
+void TransactionsManager::viewLastMonthBalance(){
+    string currentDate = SupportiveMethods::getCurrentDate();
+
+    int year = SupportiveMethods::convertStringToInt(currentDate.substr(0,4));
+    int month = SupportiveMethods::convertStringToInt(currentDate.substr(5,2));
+
+    if(month == 1){
+        int periodStart = 10000 * (year-1) + 1201;
+        int periodEnd = 10000 * (year-1) + 1231;
+        viewBalance(periodStart, periodEnd);
+    }
+    else{
+        int periodStart = 10000 * year + 100 * (month-1) + 1;
+        int periodEnd = 10000 * year + 100 * (month-1) + SupportiveMethods::countDaysInMonth(year, month-1);
+        viewBalance(periodStart, periodEnd);
+    }
+}
+
+void TransactionsManager::viewCustomBalance(){
+    Transaction periodStart, periodEnd;
+    system("cls");
+
+    do{
+        cout << "Podaj date poczatkowa bilansu formacie RRRR-MM-DD: ";
+    }while(!periodStart.setDateAndConfirm(SupportiveMethods::inputLine()));
+
+    do{
+        cout << "Podaj date koncowa bilansu formacie RRRR-MM-DD: ";
+    }while(!periodEnd.setDateAndConfirm(SupportiveMethods::inputLine()));
+
+    viewBalance(periodStart.getDate(), periodEnd.getDate());
+}
+
 void TransactionsManager::viewBalance(int periodStart, int periodEnd){
     vector <Income> currentIncomes;
     vector <Expense> currentExpenses;
@@ -151,11 +184,11 @@ void TransactionsManager::viewBalance(int periodStart, int periodEnd){
 
     Money difference = incomeSum - expenseSum;
     if(difference.getAmount() >= 0){
-        cout << endl << endl << "OSZCZEDNOSCI: " << difference.getAmountAsString() << endl;
+        cout << endl << endl << "OSZCZEDNOSCI: " << difference.getAmountAsString() << endl << endl;
     }
     else{
         difference = expenseSum - incomeSum;
-        cout << endl << endl << "DLUG: " << difference.getAmountAsString() << endl;
+        cout << endl << endl << "DLUG: " << difference.getAmountAsString() << endl << endl;
     }
 
     system("pause");
