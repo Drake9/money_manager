@@ -51,7 +51,7 @@ Income TransactionsManager::inputNewIncomeData(){
     }while(choice != 't' && choice != 'T' && choice != 'N' && choice != 'n');
 
     if(choice == 'T' || choice == 't'){
-        income.setDate(SupportiveMethods::getCurrentDate());
+        income.setDate(Date::getCurrentDate());
     }
     else{
         do{
@@ -82,7 +82,7 @@ Expense TransactionsManager::inputNewExpenseData(){
     }while(choice != 't' && choice != 'T' && choice != 'N' && choice != 'n');
 
     if(choice == 'T' || choice == 't'){
-        expense.setDate(SupportiveMethods::getCurrentDate());
+        expense.setDate(Date::getCurrentDate());
     }
     else{
         do{
@@ -100,37 +100,37 @@ Expense TransactionsManager::inputNewExpenseData(){
 }
 
 void TransactionsManager::viewCurrentMonthBalance(){
-    string currentDate = SupportiveMethods::getCurrentDate();
+    string currentDate = Date::getCurrentDate();
 
     int year = SupportiveMethods::convertStringToInt(currentDate.substr(0,4));
     int month = SupportiveMethods::convertStringToInt(currentDate.substr(5,2));
 
-    int periodStart = 10000 * year + 100 * month + 1;
-    int periodEnd = 10000 * year + 100 * month + SupportiveMethods::countDaysInMonth(year, month);
+    Date periodStart(10000 * year + 100 * month + 1);
+    Date periodEnd(10000 * year + 100 * month + periodEnd.countDaysInMonth(year, month));
 
     viewBalance(periodStart, periodEnd);
 }
 
 void TransactionsManager::viewLastMonthBalance(){
-    string currentDate = SupportiveMethods::getCurrentDate();
+    string currentDate = Date::getCurrentDate();
 
     int year = SupportiveMethods::convertStringToInt(currentDate.substr(0,4));
     int month = SupportiveMethods::convertStringToInt(currentDate.substr(5,2));
 
     if(month == 1){
-        int periodStart = 10000 * (year-1) + 1201;
-        int periodEnd = 10000 * (year-1) + 1231;
+        Date periodStart(10000 * (year-1) + 1201);
+        Date periodEnd(10000 * (year-1) + 1231);
         viewBalance(periodStart, periodEnd);
     }
     else{
-        int periodStart = 10000 * year + 100 * (month-1) + 1;
-        int periodEnd = 10000 * year + 100 * (month-1) + SupportiveMethods::countDaysInMonth(year, month-1);
+        Date periodStart(10000 * year + 100 * (month-1) + 1);
+        Date periodEnd(10000 * year + 100 * (month-1) + periodEnd.countDaysInMonth(year, month-1));
         viewBalance(periodStart, periodEnd);
     }
 }
 
 void TransactionsManager::viewCustomBalance(){
-    Transaction periodStart, periodEnd;
+    Date periodStart, periodEnd;
     system("cls");
 
     do{
@@ -141,10 +141,10 @@ void TransactionsManager::viewCustomBalance(){
         cout << "Podaj date koncowa bilansu formacie RRRR-MM-DD: ";
     }while(!periodEnd.setDateAndConfirm(SupportiveMethods::inputLine()));
 
-    viewBalance(periodStart.getDate(), periodEnd.getDate());
+    viewBalance(periodStart, periodEnd);
 }
 
-void TransactionsManager::viewBalance(int periodStart, int periodEnd){
+void TransactionsManager::viewBalance(Date periodStart, Date periodEnd){
     vector <Income> currentIncomes;
     vector <Expense> currentExpenses;
     Money incomeSum, expenseSum;
@@ -152,7 +152,7 @@ void TransactionsManager::viewBalance(int periodStart, int periodEnd){
     system("cls");
 
     for (int i=0; i<incomes.size(); i++){
-        if(incomes[i].getDate() >= periodStart && incomes[i].getDate() <= periodEnd){
+        if(incomes[i].getDate() >= periodStart.getDate() && incomes[i].getDate() <= periodEnd.getDate()){
             currentIncomes.push_back(incomes[i]);
             incomeSum += incomes[i].getAmount();
         }
@@ -160,14 +160,14 @@ void TransactionsManager::viewBalance(int periodStart, int periodEnd){
     sort(currentIncomes.begin(), currentIncomes.end());
 
     for (int i=0; i<expenses.size(); i++){
-        if(expenses[i].getDate() >= periodStart && expenses[i].getDate() <= periodEnd){
+        if(expenses[i].getDate() >= periodStart.getDate() && expenses[i].getDate() <= periodEnd.getDate()){
             currentExpenses.push_back(expenses[i]);
             expenseSum += expenses[i].getAmount();
         }
     }
     sort(currentExpenses.begin(), currentExpenses.end());
 
-    cout << "BILANS ZA OKRES " << convertIntToDate(periodStart) << " - " << convertIntToDate(periodEnd) << endl << endl;
+    cout << "BILANS ZA OKRES " << periodStart.getDateAsString() << " - " << periodEnd.getDateAsString() << endl << endl;
 
     cout << "PRZYCHODY: " << endl;
 
@@ -192,13 +192,4 @@ void TransactionsManager::viewBalance(int periodStart, int periodEnd){
     }
 
     system("pause");
-}
-
-string TransactionsManager::convertIntToDate(int date){
-    string output = SupportiveMethods::convertIntToString(date);
-
-    output.insert(6, "-");
-    output.insert(4, "-");
-
-    return output;
 }

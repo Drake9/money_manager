@@ -88,26 +88,6 @@ string Money::getAmountAsString(){
     return output;
 }
 
-/**--------------------------------**/
-
-string Money::serialize(){
-    CMarkup xml;
-    xml.AddElem( "amount", getAmountAsString());
-
-    return xml.GetDoc();
-}
-
-void Money::deserialize(string strSubDoc){
-
-    CMarkup xml( strSubDoc );
-    xml.FindElem();
-
-    if ( xml.FindElem("amount" ) )
-        setAmount(xml.GetData());
-    else
-        amount = 0;
-}
-
 /**------------ OPERATORS ------------**/
 
 Money operator + (const Money &money1, const Money &money2){

@@ -24,9 +24,6 @@ public:
     int getAmount();
     string getAmountAsString();
 
-    string serialize();
-    void deserialize(string strSubDoc);
-
     friend Money operator + (const Money &money1, const Money &money2);
     friend Money operator - (const Money &money1, const Money &money2);
     friend Money operator * (const Money &money, const int &number);

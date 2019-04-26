@@ -9,16 +9,11 @@ int Transaction::getUserID(){
 }
 
 int Transaction::getDate(){
-    return date;
+    return date.getDate();
 }
 
 string Transaction::getDateAsString(){
-    string output = SupportiveMethods::convertIntToString(date);
-
-    output.insert(6, "-");
-    output.insert(4, "-");
-
-    return output;
+    return date.getDateAsString();
 }
 
 string Transaction::getItem(){
@@ -35,88 +30,11 @@ void Transaction::setUserID(int newID){
 }
 
 void Transaction::setDate(string newDate){
-    bool success = false;
-
-    if(validateString(newDate)){
-        int year = SupportiveMethods::convertStringToInt(newDate.substr(0,4));
-        int month = SupportiveMethods::convertStringToInt(newDate.substr(5,2));
-        int day = SupportiveMethods::convertStringToInt(newDate.substr(8,2));
-
-        if(validateDate(year, month, day)){
-            date = 10000 * year + 100 * month + day;
-            success = true;
-        }
-    }
-
-    if(success == false){
-        cout << "Podana data jest nieprawidlowa." << endl;
-        date = 20010101;
-    }
+    date.setDate(newDate);
 }
 
 bool Transaction::setDateAndConfirm(string newDate){
-    bool success = false;
-
-    if(validateString(newDate)){
-        int year = SupportiveMethods::convertStringToInt(newDate.substr(0,4));
-        int month = SupportiveMethods::convertStringToInt(newDate.substr(5,2));
-        int day = SupportiveMethods::convertStringToInt(newDate.substr(8,2));
-
-        if(validateDate(year, month, day)){
-            date = 10000 * year + 100 * month + day;
-            if(getMaximalDate() >= date)
-                success = true;
-        }
-    }
-
-    return success;
-}
-
-bool Transaction::validateString(string text){
-    if(text.size() != 10)
-        return false;
-
-    for(int i=0; i<10; i++){
-
-        if(i == 4 || i == 7){
-            if(text[i] != '-' && text[i] != '.')
-                return false;
-        }
-        else{
-            if(text[i] < '0' || text[i] > '9')
-                return false;
-        }
-    }
-
-    return true;
-}
-
-bool Transaction::validateDate(int customYear, int customMonth, int customDay){
-    if(customYear < MINIMAL_YEAR)
-        return false;
-    if(customMonth < MINIMAL_MONTH)
-        return false;
-    if(customMonth > MAXIMAL_MONTH)
-        return false;
-    if(customDay < MINIMAL_DAY)
-        return false;
-    if(customDay > SupportiveMethods::countDaysInMonth(customYear, customMonth))
-        return false;
-
-    return true;
-}
-
-int Transaction::getMaximalDate(){
-    string currentDate = SupportiveMethods::getCurrentDate();
-
-    int year = SupportiveMethods::convertStringToInt(currentDate.substr(0,4));
-    int month = SupportiveMethods::convertStringToInt(currentDate.substr(5,2));
-
-    int day = SupportiveMethods::countDaysInMonth(year, month);
-
-    int maxDate = 10000 * year + 100 * month + day;
-
-    return maxDate;
+    return date.setDateAndConfirm(newDate);
 }
 
 void Transaction::setItem(string newItem){
@@ -130,7 +48,7 @@ void Transaction::setAmount(string newAmount){
 /**--------------------------------**/
 
 void Transaction::printTransaction(){
-    cout << "date: " << getDateAsString() << "    ";
+    cout << "date: " << date.getDateAsString() << "    ";
     cout << "amount: " << amount.getAmountAsString() << endl;
     cout << "item: " << item << endl;
 }
@@ -140,7 +58,7 @@ void Transaction::printTransaction(){
 Income::Income(){
     incomeID = 0;
     userID = 0;
-    date = 20010101;
+    date.setDate(20010101);
     amount.setAmount(0);
     item = "";
 }
@@ -172,7 +90,7 @@ string Income::serialize(){
     xml.IntoElem();
     xml.AddElem("incomeID", incomeID);
     xml.AddElem("userID", userID);
-    xml.AddElem("date", getDateAsString());
+    xml.AddElem("date", date.getDateAsString());
     xml.AddElem("item", item);
     xml.AddElem("amount", amount.getAmountAsString());
     xml.OutOfElem();
@@ -198,9 +116,9 @@ void Income::deserialize(string strSubDoc){
         userID = 0;
 
     if ( xml.FindElem("date") )
-        setDate(xml.GetData());
+        date.setDate(xml.GetData());
     else
-        setDate("2001-01-01");
+        date.setDate("2001-01-01");
 
     if ( xml.FindElem("item") )
         item = xml.GetData();
@@ -218,7 +136,7 @@ void Income::deserialize(string strSubDoc){
 Expense::Expense(){
     expenseID = 0;
     userID = 0;
-    date = 20010101;
+    date.setDate(20010101);
     amount.setAmount(0);
     item = "";
 }
@@ -250,7 +168,7 @@ string Expense::serialize(){
     xml.IntoElem();
     xml.AddElem("expenseID", expenseID);
     xml.AddElem("userID", userID);
-    xml.AddElem("date", getDateAsString());
+    xml.AddElem("date", date.getDateAsString());
     xml.AddElem("item", item);
     xml.AddElem("amount", amount.getAmountAsString());
     xml.OutOfElem();
@@ -276,9 +194,9 @@ void Expense::deserialize(string strSubDoc){
         userID = 0;
 
     if ( xml.FindElem("date") )
-        setDate(xml.GetData());
+        date.setDate(xml.GetData());
     else
-        setDate("2001-01-01");
+        date.setDate("2001-01-01");
 
     if ( xml.FindElem("item") )
         item = xml.GetData();
