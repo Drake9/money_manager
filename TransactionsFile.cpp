@@ -47,33 +47,7 @@ vector <Expense> TransactionsFile::loadUserExpensesFromFile(int loggedInUserID){
 
     return expenses;
 }
-/*
-void TransactionsFile::writeAllIncomesToFile(vector <Income> &incomes){
-    CMarkup xml;
-    xml.AddElem("incomes");
-    xml.IntoElem();
 
-    for (vector <Income>::iterator itr = incomes.begin(); itr != incomes.end(); itr++){
-        xml.AddSubDoc(itr->serialize());
-    }
-
-    xml.OutOfElem();
-    xml.Save( INCOMES_FILE_NAME.c_str() );
-}
-
-void TransactionsFile::writeAllExpensesToFile(vector <Expense> &expenses){
-    CMarkup xml;
-    xml.AddElem("expenses");
-    xml.IntoElem();
-
-    for (vector <Expense>::iterator itr = expenses.begin(); itr != expenses.end(); itr++){
-        xml.AddSubDoc(itr->serialize());
-    }
-
-    xml.OutOfElem();
-    xml.Save( EXPENSES_FILE_NAME.c_str() );
-}
-*/
 bool TransactionsFile::appendIncomeToFile(Income newIncome){
     vector <Income> incomes;
     Income income;

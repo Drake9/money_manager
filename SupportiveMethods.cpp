@@ -35,16 +35,6 @@ char SupportiveMethods::inputChar(){
     return character;
 }
 
-string SupportiveMethods::getNumber(string text, int characterPosition){
-    string number = "";
-    while(isdigit(text[characterPosition]) == true)
-    {
-        number += text[characterPosition];
-        characterPosition ++;
-    }
-    return number;
-}
-
 int SupportiveMethods::convertStringToInt(string number){
     int result;
     istringstream iss(number);
@@ -82,24 +72,6 @@ int SupportiveMethods::inputInteger(){
         cout << "To nie jest liczba. Wpisz ponownie." << endl;
     }
     return number;
-}
-
-bool SupportiveMethods::deleteFile(string fileName){
-    if (remove(fileName.c_str()) == 0)
-        return true;
-    else{
-        cout << "Nie udalo sie usunac pliku." << fileName << endl;
-        return false;
-    }
-}
-
-bool SupportiveMethods::changeFileName(string fileName, string wantedFileName){
-    if (rename(fileName.c_str(), wantedFileName.c_str()) == 0)
-        return true;
-    else{
-        cout << "Nazwa pliku nie zostala zmieniona." << wantedFileName << endl;
-        return false;
-    }
 }
 
 string SupportiveMethods::convertTableToString(char *table, int tableSize){

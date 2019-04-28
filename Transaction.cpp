@@ -49,7 +49,7 @@ void Transaction::setAmount(string newAmount){
 
 void Transaction::printTransaction(){
     cout << "date: " << date.getDateAsString() << "    ";
-    cout << "amount: " << amount.getAmountAsString() << endl;
+    cout << "amount: " << amount.getAmountAsString() <<  endl;
     cout << "item: " << item << endl;
 }
 

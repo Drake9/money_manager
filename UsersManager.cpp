@@ -41,10 +41,12 @@ User UsersManager::inputNewUserData(){
 
     cout << "Podaj imie: ";
     name = SupportiveMethods::inputLine();
+    name = SupportiveMethods::changeFirstLetterToUppercaseAndOtherToLowercase(name);
     user.setName(name);
 
     cout << "Podaj nazwisko: ";
     surname = SupportiveMethods::inputLine();
+    surname = SupportiveMethods::changeFirstLetterToUppercaseAndOtherToLowercase(surname);
     user.setSurname(surname);
 
     return user;
