@@ -25,8 +25,6 @@ public:
     int getLastExpenseID();
     vector <Income> loadUserIncomesFromFile(int loggedInUserID);
     vector <Expense> loadUserExpensesFromFile(int loggedInUserID);
-    //void writeAllIncomesToFile(vector <Income> &incomes);
-    //void writeAllExpensesToFile(vector <Expense> &expenses);
     bool appendIncomeToFile(Income newIncome);
     bool appendExpenseToFile(Expense newExpense);
 };

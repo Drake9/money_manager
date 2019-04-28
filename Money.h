@@ -6,8 +6,6 @@ using namespace std;
 
 class Money{
 
-    const string CURRENCY_SYMBOL = "PLN";
-
     int amount;
 
     bool validateString(string text);
